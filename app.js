@@ -36,7 +36,7 @@ var financeController = (function() {
   };
 
   var data = {
-    allItems: {
+    items: {
       inc: [],
       exp: []
     },
@@ -47,6 +47,26 @@ var financeController = (function() {
     }
   };
   
+  return {
+    addItem: function (type, desc, val) {
+      
+      var item,id;
+
+      // id давхардахгүй байх 
+      if(data.items[type].length === 0 ) id = 1;
+      else {
+        id = data.items[type][data.items[type].length - 1].id + 1;
+      }
+
+      if (type === 'inc'){
+        item = new Income(id, desc, val);
+      } else {
+        item = new Expense(id, desc, val);
+      }
+
+      data.items[type].push(item);
+    }
+  };
 
 })();
 
@@ -55,8 +75,11 @@ var appController = (function(uiController, financeController) {
   
   var ctrlAddItem = function() {
     // 1. оруулах өгөгдлийг дэлгэцнээс олж авах.
-    console.log(uiController.getInput());
+    var input = uiController.getInput();
+
+    //console.log(input);
     // 2. Олж авсан өгөгдлүүдээ санхүүгийн конторолл?рт дамжуулж тэнд хадаглах.
+    financeController.addItem(input.type, input.description, input.value);
     // 3. Олж авсан өгөгдлөө вэб дээр тохирох хэсэгт гаргана
     // 4. Төсөвийг тооцоолно
     // 5. Эцсийн үлдэгдэл тооцоог дэлгэцэнд гаргах.
