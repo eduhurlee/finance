@@ -1,28 +1,89 @@
 // дэлгэцтэй ажиллах конторллер
-var uiController = (function() {})();
+var uiController = (function() {
+  var DOMstrings = {
+    inputType: ".add__type",
+    inputDescription: ".add__description",
+    inputValue: ".add__value",
+    addBtn: ".add__btn"
+  };
+
+  return {
+    getInput: function() {
+      return {          
+        type: document.querySelector(DOMstrings.inputType).value,    
+        description: document.querySelector(DOMstrings.inputDescription).value, 
+        value: document.querySelector(DOMstrings.inputValue).value  
+      };
+    },
+    getDOMstrings: function() {
+      return DOMstrings;
+    }
+  };
+})();
 
 // Санхүүтэй ажиллах конторллер
-var financeController = (function() {})();
+var financeController = (function() {
+  var Income = function(id, description, value) {
+    this.id = id;
+    this.description = description;
+    this.value = value;
+  };
+  
+  var Expense = function(id, description, value) {
+    this.id = id;
+    this.description = description;
+    this.value = value;
+  };
+
+  var data = {
+    allItems: {
+      inc: [],
+      exp: []
+    },
+  
+    totals: {
+      inc: 0,
+      exp: 0
+    }
+  };
+  
+
+})();
 
  // Программын холбогч конторллер
 var appController = (function(uiController, financeController) {
+  
   var ctrlAddItem = function() {
     // 1. оруулах өгөгдлийг дэлгэцнээс олж авах.
-    console.log("дэлгэцнээс өгөгдлөө авах хэсэг");
+    console.log(uiController.getInput());
     // 2. Олж авсан өгөгдлүүдээ санхүүгийн конторолл?рт дамжуулж тэнд хадаглах.
     // 3. Олж авсан өгөгдлөө вэб дээр тохирох хэсэгт гаргана
     // 4. Төсөвийг тооцоолно
     // 5. Эцсийн үлдэгдэл тооцоог дэлгэцэнд гаргах.
   };
 
-  document.querySelector(".add__btn").addEventListener("click", function() {
-    ctrlAddItem(); // ctrlAddItem дуудаж байна
-  }); // хулганаас товчлуур дээр дарах
+  var setupEventListeners = function() {
 
-  document.addEventListener("keypress", function(event) {
-    if (event.keyCode === 13 || event.which === 13) {
-      ctrlAddItem(); // ctrlAddItem дуудаж байна 
-                     //event.which хуучин хөтөч дээр дуудагдана
+    var DOM = uiController.getDOMstrings();   
+
+    document.querySelector(DOM.addBtn).addEventListener("click", function() {
+      ctrlAddItem(); 
+    }); 
+  
+    document.addEventListener("keypress", function(event) {
+      if (event.keyCode === 13 || event.which === 13) {
+        ctrlAddItem(); 
+      }
+    }); 
+  };
+
+  return {
+    init: function() {
+      console.log('start');
+      setupEventListeners();
     }
-  }); // интэр дарах үеийн код --- код нь 13
+  };
+
 })(uiController, financeController);
+
+appController.init();
