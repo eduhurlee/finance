@@ -152,14 +152,14 @@ var financeController = (function() {
 
     deleteItems: function(type, id){
       var ids = data.items[type].map(function(el){
-        return el.id;
+        return el.id;});
 
         var index = ids.indexOf(id);
 
         if (index !== -1) {
           data.items[type].splice(index, 1);
         }
-      });
+      
     },
 
     addItem: function (type, desc, val) {
@@ -202,17 +202,22 @@ var appController = (function(uiController, financeController) {
 
       uiController.addListItem(item, input.type);
       uiController.clearFields();
-      // 4. Төсөвийг тооцоолно
-      financeController.tusuvTootsooloh();
-
-
-      // 5. Эцсийн үлдэгдэл тооцоог дэлгэцэнд гаргах.
-      var tusuv = financeController.tusviigAvah();
-
-      // 6. Төсвийн тооцоог гаргана.
-      uiController.tusviigUzuuleh(tusuv );
+      
+      // Төсвийг шинээр тооцоолж дэлгэцэнд хэвлэх
+      updateTusuv();
    }
     
+  };
+
+  var updateTusuv = function() {
+    // 4. Төсөвийг тооцоолно
+    financeController.tusuvTootsooloh();
+
+    // 5. Эцсийн үлдэгдэл тооцоог дэлгэцэнд гаргах.
+    var tusuv = financeController.tusviigAvah();
+
+    // 6. Төсвийн тооцоог гаргана.
+    uiController.tusviigUzuuleh(tusuv);
   };
 
   var setupEventListeners = function() {
@@ -244,11 +249,14 @@ var appController = (function(uiController, financeController) {
 
       // 1. Санхүүгийн модулиас type, id ашиглан устгана
       financeController.deleteItems(type, itemId);
-      
+
       // 2, дэлгэц дээрээс энэ элментийг утгана
         uiController.deleteListItem(id);
 
       // 3, Үлдэгдэл тооцоог шинэчилж харуулна
+      
+      // Төсвийг шинээр тооцоолж дэлгэцэнд хэвлэх
+      updateTusuv();
       }            
     });
   };
